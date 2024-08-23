@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mindbox
+  namespace: for-mindbox
+spec:
+  replicas: 2  # Указываем сколько реплик будет запущено при старте деплоймента
+  selector:
+    matchLabels:
+      app: mindbox
+  template:
+    metadata:
+      labels:
+        app: mindbox
+    spec:
+      containers:
+        - name: mindbox
+          image: test/mindbox:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              memory: "128Mi" # 128Mi памяти будет запрошено для запуска пода
+              cpu: "400m"     # 0.4 процессорного времени будет запрошено для запуска пода. Специально указано с запасом.
+            limits:
+              memory: "256Mi" # Максимальное значение памяти которое может использовать под
+              cpu: "420m"    # Максимальное значение CPU которое может использовать под
+          lifecycle:
+          postStart:
+            exec:
+              command: [ "/bin/bash", "echo 'test' "]

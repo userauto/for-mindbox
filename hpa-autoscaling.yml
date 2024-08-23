@@ -1,0 +1,19 @@
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  labels:
+    app: mindbox
+  name: mindbox
+  namespace: for-mindbox
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mindbox
+  minReplicas: 2  # Минимальное число реплик
+  maxReplicas: 4  # Максимальное число реплик
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 80 # При потреблении больше 80% от 0.4 CPU создается реплика пода
